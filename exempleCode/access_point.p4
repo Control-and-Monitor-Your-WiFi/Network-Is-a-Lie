@@ -1,3 +1,5 @@
+/* traffic_filter.p4 + arp_icmp.p4 */
+
 /* -*- P4_16 -*- */
 #include <core.p4>
 #include <v1model.p4>
@@ -153,6 +155,14 @@ parser MyParser(packet_in packet,
       packet.extract(hdr.icmp);
       transition accept;
     }
+
+    /* parse_icmp de l'exemple arp_icmp.p4
+    state parse_icmp {
+      bit<32> n = (bit<32>) (hdr.ipv4.totalLen) - (bit<32>)(hdr.ipv4.versionihl << 2);
+      packet.extract(hdr.icmp, 8*n-64);
+      transition accept;
+    }
+    */
 }
 
 
@@ -174,6 +184,75 @@ control MyIngress(inout headers hdr,
                   inout standard_metadata_t standard_metadata) {
     action drop() {
         mark_to_drop(standard_metadata);
+    }
+
+    action arp_reply(macAddr_t request_mac) {
+        //update operation code from request to reply
+        hdr.arp.op_code = ARP_REPLY;
+
+        //reply's dst_mac is the request's src mac
+        hdr.arp.dst_mac = hdr.arp.src_mac;
+
+        //reply's dst_ip is the request's src ip
+        hdr.arp.src_mac = request_mac;
+
+        //reply's src ip is the request's dst ip
+        hdr.arp.src_ip = hdr.arp.dst_ip;
+
+        //update ethernet header
+        hdr.ethernet.dstAddr = hdr.ethernet.srcAddr;
+        hdr.ethernet.srcAddr = request_mac;
+
+        //send it back to the same port
+        standard_metadata.egress_spec = standard_metadata.ingress_port;
+    }
+
+    action icmp_reply() {
+        //set ICMP type to Echo reply
+        hdr.icmp.icmp_type = 0;
+
+        //for checksum calculation this field should be zero
+        hdr.icmp.checksum = 0;
+
+        //swap the source and destination IP addresses
+	bit<32> tmp_ip = hdr.ipv4.srcAddr;
+        hdr.ipv4.srcAddr = hdr.ipv4.dstAddr;
+        hdr.ipv4.dstAddr = tmp_ip;
+
+        //swap the source and destination MAC addresses
+        bit<48> tmp_mac = hdr.ethernet.dstAddr;
+        hdr.ethernet.dstAddr = hdr.ethernet.srcAddr;
+        hdr.ethernet.srcAddr = tmp_mac;
+
+        //send it back to the same port 
+        standard_metadata.egress_spec = standard_metadata.ingress_port;
+    }
+
+    // ARP table implements an ARP responder
+    table arp_exact {
+      key = {
+        hdr.arp.dst_ip: exact;
+      }
+      actions = {
+        arp_reply;
+        drop;
+      }
+      size = 1024;
+      default_action = drop;
+    }
+
+    // replies to ICMP echo requests if the destination IP matches
+    table icmp_responder {
+        key = {
+            hdr.ethernet.dstAddr: exact;
+            hdr.ipv4.dstAddr: lpm;
+        }
+        actions = {
+            icmp_reply;
+            drop;
+        }
+        size = 1024;
+        default_action = drop();
     }
 
     table eth_dstMac_filter {
@@ -316,6 +395,12 @@ control MyIngress(inout headers hdr,
           }
 	  if (dropped != 1)
             standard_metadata.egress_spec = (standard_metadata.ingress_port+1)%2;
+            if (hdr.arp.isValid()){
+                arp_exact.apply();
+            }
+            else if (hdr.icmp.isValid()){
+                icmp_responder.apply();
+            }
         }
     }
 }
@@ -336,6 +421,36 @@ control MyEgress(inout headers hdr,
 
 control MyComputeChecksum(inout headers hdr, inout metadata meta) {
      apply {
+        //update ICMP checksum
+        update_checksum(
+	    hdr.icmp.isValid(),
+            {
+              hdr.icmp.icmp_type,
+              hdr.icmp.icmp_code,
+              16w0,
+              hdr.icmp.identifier,
+              hdr.icmp.sequence_number,
+              hdr.icmp.padding
+            },
+              hdr.icmp.checksum,
+              HashAlgorithm.csum16);
+
+        //update IPv4 checksum
+        update_checksum(
+            hdr.ipv4.isValid(), 
+            { 
+              hdr.ipv4.versionihl, 
+              hdr.ipv4.diffserv, 
+              hdr.ipv4.totalLen, 
+              hdr.ipv4.identification, 
+              hdr.ipv4.fragOffset, 
+              hdr.ipv4.ttl, 
+              hdr.ipv4.protocol, 
+              hdr.ipv4.srcAddr, 
+              hdr.ipv4.dstAddr 
+            }, 
+              hdr.ipv4.hdrChecksum, 
+              HashAlgorithm.csum16);
      }
 }
 

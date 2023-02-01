@@ -1,5 +1,5 @@
 {
   "target": "bmv2",
-  "p4info": "build/l2_learning.p4.p4info.txt",
-  "bmv2_json": "build/l2_learning.json",
+  "p4info": "../bmv2/bin/l2switch.p4info.txt",
+  "bmv2_json": "../bmv2/bin/l2switch.json"
 }

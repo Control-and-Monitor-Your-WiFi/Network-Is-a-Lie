@@ -1,0 +1,11 @@
+{
+  "target": "bmv2",
+  "p4info": "bin/myprog.p4info.txt",
+  "bmv2_json": "bin/myprog.json",
+  "clone_session_entries": [
+    {
+      "clone_session_id":100,
+      "replicas":[{"egress_port":255, "instance":1}]
+    }
+  ]
+}

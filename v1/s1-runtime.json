@@ -14,14 +14,16 @@
     "match": {
       "hdr.ethernet.srcAddr": ["56:ab:43:9f:b2:d7"]
     },
-    "action_name": "NoAction"
+    "action_name": "NoAction",
+    "action_params":{}
   },
   {
     "table": "MyIngress.acl",
     "match": {
       "hdr.ethernet.srcAddr": ["90:0f:0c:a2:9d:d9"]
     },
-    "action_name": "NoAction"
+    "action_name": "NoAction",
+    "action_params":{}
   }
     
   ]

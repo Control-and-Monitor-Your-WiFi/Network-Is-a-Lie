@@ -160,6 +160,7 @@ control ingress(inout headers hdr, inout metadata meta, inout standard_metadata_
         }
         actions = {
             ChangeAddrIn;
+            NoAction;
             drop;
         }
         size = 1024;

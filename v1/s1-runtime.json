@@ -9,8 +9,8 @@
     }
   ],
   "table_entries": [
-    {
-    "table": "MyIngress.acl",
+  {
+    "table": "ingress.acl",
     "match": {
       "hdr.ethernet.srcAddr": ["56:ab:43:9f:b2:d7"]
     },
@@ -18,9 +18,25 @@
     "action_params":{}
   },
   {
-    "table": "MyIngress.acl",
+    "table": "ingress.acl",
     "match": {
-      "hdr.ethernet.srcAddr": ["90:0f:0c:a2:9d:d9"]
+      "hdr.ethernet.srcAddr": ["10:01:00:00:00:00"]
+    },
+    "action_name": "NoAction",
+    "action_params":{}
+  },
+  {
+    "table": "ingress.acl",
+    "match": {
+      "hdr.ethernet.srcAddr": ["10:01:00:00:10:00"]
+    },
+    "action_name": "NoAction",
+    "action_params":{}
+  },
+  {
+    "table": "ingress.acl",
+    "match": {
+      "hdr.ethernet.srcAddr": ["10:01:00:00:00:10"]
     },
     "action_name": "NoAction",
     "action_params":{}

@@ -40,6 +40,14 @@
     },
     "action_name": "NoAction",
     "action_params":{}
+  },
+  {
+    "table": "ingress.acl",
+    "match": {
+      "hdr.ethernet.srcAddr": ["3c:22:fb:a8:8d:ad"]
+    },
+    "action_name": "NoAction",
+    "action_params":{}
   }
     
   ]

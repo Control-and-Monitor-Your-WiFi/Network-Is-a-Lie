@@ -102,7 +102,7 @@ def main(runtime_conf_file):
             print("Inserting %d table entries..." % len(table_entries))
             for entry in table_entries:
                 print(tableEntryToString(entry))
-                validateTableEntry(entry, p4info_helper, runtime_json)
+                validateTableEntry(entry, p4info_helper, runtime_conf_file)
                 insertTableEntry(sw, entry, p4info_helper)
 
         # Waiting for packetIn packets from the switch

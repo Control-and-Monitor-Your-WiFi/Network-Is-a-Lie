@@ -1,0 +1,62 @@
+{% extends "layouts/base.html" %}
+
+{% block title %}White List{% endblock %}
+
+{% block content %}
+
+<div class="white-list">
+    <div class="content">
+        <p>White List</p>
+
+        <!-- {{ tab }} -->
+        {% for indice in tab %}
+            <b>{{ indice }}</b><br />
+            {% for item in indice %}
+                {{ item }}<br />
+            {% endfor %}
+            <!-- <form role="form" method="post" action="">
+                                
+                {% csrf_token %}  
+            
+                <div class="card-body px-5 py-3"> 
+            
+                    <div class="row">
+                        <div class="col-md-12 px-md-1">
+                            <div class="form-group">
+                                <label>Username</label>
+                                {{ form.username }}
+                            </div>
+                        </div>
+                    </div>  
+                </div>
+                <div class="card-footer text-center">
+                    <button type="submit" name="login" class="btn btn-fill btn-primary">Login</button>
+                </div>
+            
+            </form> -->
+            <br>
+        {% endfor %}
+        
+        <br>
+        Ajouter une nouvelle adresse mac dans la table
+        <br><br>
+        <form role="form" method="post" action="">
+            <div class=""> 
+                {% csrf_token %}  
+                <div class="">
+                    <div class="">
+                        <div class="">
+                            <label>Mac address</label>
+                            {{ form.mac }}
+                        </div>
+                    </div>
+                </div>  
+            </div>
+            <div class="">
+                <button type="submit" name="login" class="btn btn-fill btn-primary">Submit</button>
+            </div>
+        </form>
+
+    </div>
+</div>
+{% endblock content %}

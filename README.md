@@ -37,13 +37,22 @@ EOF
 sh startController.sh
 ```
 
-
-
-
-```
-sudo iptables -t nat -A POSTROUTING -s 192.168.4.0/24 -o eth0 -j MASQUERADE
-```
 ---
+## erreur possible
+
+> p4runtime_lib.bmv2 non trouvé
+
 ```
-ModuleNotFoundError: No module named 'p4runtime_lib'
+sys.path.append(<path vers p4runtime_lib>)
+```
+
+> p4.tmp non trouvé
+```
+cp -r /usr/lib/python3/dist-packages/p4/tmp/ /usr/local/lib/python3.9/dist-packages/p4/ ; \
+pipe install protobuf==3.20.*
+```
+
+> pas de remonté vers le controller
+```
+verifier la presenc de --cpu-port 255 a l'exection de P4
 ```

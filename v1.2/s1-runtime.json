@@ -1,0 +1,70 @@
+{
+  "target": "bmv2",
+  "p4info": "bin/myprog.p4info.txt",
+  "bmv2_json": "bin/myprog.json",
+  "clone_session_entries": [
+    {
+      "clone_session_id":100,
+      "replicas":[{"egress_port":255, "instance":1}]
+    }
+  ],
+  "table_entries": [
+  {
+    "table": "ingress.acl",
+    "match": {
+      "hdr.ethernet.srcAddr": ["56:ab:43:9f:b2:d7"]
+    },
+    "action_name": "NoAction",
+    "action_params":{}
+  },
+  {
+    "table": "ingress.acl",
+    "match": {
+      "hdr.ethernet.srcAddr": ["10:04:00:00:00:00"]
+    },
+    "action_name": "NoAction",
+    "action_params":{}
+  },
+  {
+    "table": "ingress.acl",
+    "match": {
+      "hdr.ethernet.srcAddr": ["10:04:00:00:10:00"]
+    },
+    "action_name": "NoAction",
+    "action_params":{}
+  },
+  {
+    "table": "ingress.acl",
+    "match": {
+      "hdr.ethernet.srcAddr": ["10:04:00:00:00:10"]
+    },
+    "action_name": "NoAction",
+    "action_params":{}
+  },
+  {
+    "table": "ingress.acl",
+    "match": {
+      "hdr.ethernet.srcAddr": ["10:04:00:00:10:10"]
+    },
+    "action_name": "NoAction",
+    "action_params":{}
+  },
+  {
+    "table": "ingress.acl",
+    "match": {
+      "hdr.ethernet.srcAddr": ["d6:2e:30:7e:c2:97"]
+    },
+    "action_name": "NoAction",
+    "action_params":{}
+  },
+  {
+    "table": "ingress.acl",
+    "match": {
+      "hdr.ethernet.srcAddr": ["3c:22:fb:a8:8d:ad"]
+    },
+    "action_name": "NoAction",
+    "action_params":{}
+  }
+    
+  ]
+}

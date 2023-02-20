@@ -21,7 +21,7 @@ sudo p4c-bm2-ss -I /usr/share/p4c/p4include --std p4-16 --p4runtime-files /root/
 
 echo "\n" 
 echo "----exec p4" 
-echo "sudo simple_switch_grpc -i 0@veth0 -i 1@veth1 /root/bmv2/bin/myprog.json --log-console -- --grpc-server-addr 127.0.0.1:50051"
+echo "sudo simple_switch_grpc -i 0@veth0 -i 1@veth1 /root/bmv2/bin/myprog.json --log-console -- --cpu-port 255 --grpc-server-addr 127.0.0.1:50051"
 echo "----exec controller"
 echo "cd /root/bmv2"
 echo "python3 controllerTest.py -c s1-runtime.json"

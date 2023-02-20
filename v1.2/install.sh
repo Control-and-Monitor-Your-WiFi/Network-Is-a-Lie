@@ -7,7 +7,7 @@ cp -i controllerTest.py /root/bmv2/
 cp -i s1-runtime.json /root/bmv2/
 
 # rm -rRf /root/bmv2/p4runtime_lib
-cp -i ../p4runtime_lib /root/
+cp -i ../p4runtime_lib /root/bmv2
 
 #il faut stop t4p4s et bmv2, mais je ne suis pas sur que enable bmv2 soit requis
 systemctl stop t4p4s.service

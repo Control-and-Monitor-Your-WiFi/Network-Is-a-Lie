@@ -14,7 +14,7 @@ import grpc
 from scapy.all import *
 
 # Import P4Runtime lib from parent dir
-sys.path.append('/home/pi/sdn-p4-lab')
+sys.path.append('./sdn-p4-lab')
 
 import p4runtime_lib.bmv2
 import p4runtime_lib.helper
